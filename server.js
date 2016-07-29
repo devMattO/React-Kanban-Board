@@ -1,51 +1,28 @@
 const express = require('express');
 const app = express();
+const Router = require('./routes/home_crud');
+const bodyParser = require('body-parser');
+
+/*----------  MONGOOSE ORM SETUP   ----------*/
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/kanban');
 const db = mongoose.connection;
-const Promise = require('mpromise');
-
-db.on('error', console.error.bind(console, "connection error:"));
+db.on('error', console.error.bind(console, "connect error:"));
 db.once('open', () => {
-  console.log("Hi mongoose!");
+  console.log("Mongo reporting for duty!");
 });
 
-var cardSchema = mongoose.Schema({
-  Title: String,
-  Priority: String,
-  Created_By: String,
-  Assigned_To: String
-});
 
-// kittySchema.methods.speak = function() {
-//   var greeting = "Hi I'm " + this.name;
-//   console.log(greeting);
-// };
-var Card = mongoose.model('cards', cardSchema);
-
-var newCard = new Card();
-newCard.Title = 'card title';
-newCard.Priority = 'somehting about Priority';
-newCard.Created_By = 'matt';
-newCard.Assigned_To = 'dat boi';
-
-// var silence = new Kitten({ name: "Silence" });
-// console.log(silence.name);
-
-
-// // var Kitten = mongoose.model('Kitten', kittySchema);
-
-// var fluffy = new Kitten({ name: 'fluffy' });
-// fluffy.speak();
-
-newCard.save((err) => {
-  if(err) return console.error(err);
-});
-
-// Kitten.find({name: /^Fluff/ }, ()=>{});
-
+/*----------  SERVER MIDDLEWARE  ----------*/
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(express.static('public'));
+app.use('/test', Router);
 
- app.listen(3000, () => {
-  console.log("We did it Reddit!");
+
+
+var port = process.env.PORT || 3000;
+
+ app.listen(port, () => {
+  console.log(`Our port of call: ${port}`);
 });
