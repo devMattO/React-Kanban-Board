@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
 const db = mongoose.connection;
 const Promise = require('mpromise');
+
 db.on('error', console.error.bind(console, "connection error:"));
 db.once('open', () => {
   console.log("Hi mongoose!");
