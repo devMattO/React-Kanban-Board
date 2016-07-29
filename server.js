@@ -28,6 +28,7 @@ console.log(silence.name);
 
 
 // var Kitten = mongoose.model('Kitten', kittySchema);
+var matt = 'im here';
 
 var fluffy = new Kitten({ name: 'fluffy' });
 fluffy.speak();
