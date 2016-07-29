@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://localhost/kanban');
 const db = mongoose.connection;
 const Promise = require('mpromise');
 
@@ -10,35 +10,39 @@ db.once('open', () => {
   console.log("Hi mongoose!");
 });
 
-var kittySchema = mongoose.Schema({
-  name: String
-  // speak: function() {
-  //   var greeting = "Hi I'm " + this.name;
-  //   console.log(greeting);
-  // }
+var cardSchema = mongoose.Schema({
+  Title: String,
+  Priority: String,
+  Created_By: String,
+  Assigned_To: String
 });
 
-kittySchema.methods.speak = function() {
-  var greeting = "Hi I'm " + this.name;
-  console.log(greeting);
-};
-var Kitten = mongoose.model('Kitten', kittySchema);
+// kittySchema.methods.speak = function() {
+//   var greeting = "Hi I'm " + this.name;
+//   console.log(greeting);
+// };
+var Card = mongoose.model('cards', cardSchema);
 
-var silence = new Kitten({ name: "Silence" });
-console.log(silence.name);
+var newCard = new Card();
+newCard.Title = 'card title';
+newCard.Priority = 'somehting about Priority';
+newCard.Created_By = 'matt';
+newCard.Assigned_To = 'dat boi';
+
+// var silence = new Kitten({ name: "Silence" });
+// console.log(silence.name);
 
 
-// var Kitten = mongoose.model('Kitten', kittySchema);
+// // var Kitten = mongoose.model('Kitten', kittySchema);
 
-var fluffy = new Kitten({ name: 'fluffy' });
-fluffy.speak();
+// var fluffy = new Kitten({ name: 'fluffy' });
+// fluffy.speak();
 
-fluffy.save((err, fluffy) => {
+newCard.save((err) => {
   if(err) return console.error(err);
-  fluffy.speak();
 });
 
-Kitten.find({name: /^Fluff/ }, ()=>{});
+// Kitten.find({name: /^Fluff/ }, ()=>{});
 
 app.use(express.static('public'));
 
