@@ -12,17 +12,14 @@ db.once('open', () => {
   console.log("Mongo reporting for duty!");
 });
 
-
 /*----------  SERVER MIDDLEWARE  ----------*/
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
 app.use('/test', Router);
 
-
-
 var port = process.env.PORT || 3000;
 
- app.listen(port, () => {
+app.listen(port, () => {
   console.log(`Our port of call: ${port}`);
 });

@@ -23,7 +23,6 @@ Router.use(methodOverride(function(req, res){
 Router.route('/')
   .get( ( req, res ) => {
     Card.find( ( err, cards ) => {
-      console.log(cards[8].title,'<----cards[8]');
       if (err) res.send(err);
       res.json(cards);
     });
