@@ -12,7 +12,7 @@ class KanbanBox extends React.Component {
   onPostData(data) {
     const parsedData = JSON.parse(data.currentTarget.response);
     console.log(parsedData,'<----parsedData');
-    this.setState({data: parsedData[8]});
+    this.setState({data: parsedData});
   }
 
   loadData(){
@@ -30,7 +30,6 @@ class KanbanBox extends React.Component {
     return(
       <div>
         <h1>Kanban Box</h1>
-        <h3>{this.state.data.title}</h3>
         <KanbanPosts data={this.state.data} />
       </div>
     );
@@ -50,13 +49,27 @@ class KanbanPosts extends React.Component {
     console.log(this.props.data,'<----this.props.data');
     var kanbanListNode = this.props.data.map(function(kanbanDataItem){
       return(
-        <KanbanItem title={kanbanDataItem.data.title} priority={kanbanDataItem.data.priority} status={kanbanDataItem.data.status} createdBy={kanbanDataItem.data.createdBy} assignedTo={kanbanDataItem.data.assignedTo} key={kanbanDataItem.data.id} />
+        <KanbanItems title={kanbanDataItem.title} priority={kanbanDataItem.priority} status={kanbanDataItem.status} createdBy={kanbanDataItem.createdBy} assignedTo={kanbanDataItem.assignedTo} key={kanbanDataItem._id} />
       )
     });
     return(
       <div>
         <h2>Kanban Posts</h2>
         { kanbanListNode }
+      </div>
+    );
+  };
+};
+
+class KanbanItems extends React.Component {
+  render(){
+  console.log(this.props,'<----this.props');
+    return(
+      <div>
+        <h3>{this.props.title}</h3>
+        <p>Priority: {this.props.priority}</p>
+        <p>Assigned To: {this.props.assignedTo}</p>
+        <p>Created By: {this.props.createdBy}</p>
       </div>
     );
   };
