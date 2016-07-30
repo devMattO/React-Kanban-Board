@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
-const Router = require('./routes/home_crud');
 const bodyParser = require('body-parser');
+const Router = require('./routes/home_crud');
 
 /*----------  MONGOOSE ORM SETUP   ----------*/
 const mongoose = require('mongoose');

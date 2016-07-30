@@ -23,6 +23,7 @@ Router.use(methodOverride(function(req, res){
 Router.route('/')
   .get( ( req, res ) => {
     Card.find( ( err, cards ) => {
+      console.log(cards[8].title,'<----cards[8]');
       if (err) res.send(err);
       res.json(cards);
     });
@@ -34,7 +35,7 @@ Router.route('/')
     card.status = req.body.status;
     card.createdBy = req.body.createdBy;
     card.assignedTo = req.body.assignedTo;
-
+    console.log(req.body.priority,'<----');
     card.save( ( err ) => {
       if (err) res.send(err);
       res.json({ message: 'Card created!' });
