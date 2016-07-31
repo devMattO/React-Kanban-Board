@@ -15,7 +15,6 @@ class KanbanBox extends React.Component {
 
   onPostData(data) {
     const parsedData = JSON.parse(data.currentTarget.response);
-    // console.log(parsedData,'<----parsedData');
     this.setState({
       data: parsedData,
       todo: parsedData.filter((datuh)=>{
@@ -38,13 +37,10 @@ class KanbanBox extends React.Component {
     req.send();
   }
 
-  updateHandler(uniqueId,props,status){ //put req //if successful call load//else nada
-    console.log(uniqueId);
-console.log(props,'<----just props');
+  updateHandler(uniqueId,props,status){
     var that = this;
     const req = new XMLHttpRequest();
     req.addEventListener("load", function(){
-      console.log(this,'<----this');
       if(this.responseText){
         that.loadData();
       }
@@ -66,7 +62,6 @@ console.log(props,'<----just props');
   };
 
   render(){
-  console.log(this.state.done,'<----this.state.done');
     return(
       <div>
         <h1>Kanban Box</h1>
