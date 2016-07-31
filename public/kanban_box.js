@@ -64,10 +64,12 @@ class KanbanBox extends React.Component {
   render(){
     return(
       <div>
-        <h1>Kanban Box</h1>
-        <KanbanColumns title='To-Do' data={this.state.todo} updateHandler={this.updateHandler} />
-        <KanbanColumns title='Doing' data={this.state.doing} updateHandler={this.updateHandler} />
-        <KanbanColumns title='Done' data={this.state.done} updateHandler={this.updateHandler} />
+        <h1>Kanban Board</h1>
+        <div className="kantainer">
+          <KanbanColumns title='To-Do' data={this.state.todo} updateHandler={this.updateHandler} />
+          <KanbanColumns title='Doing' data={this.state.doing} updateHandler={this.updateHandler} />
+          <KanbanColumns title='Done' data={this.state.done} updateHandler={this.updateHandler} />
+        </div>
       </div>
     );
   };
@@ -99,7 +101,7 @@ class KanbanColumns extends React.Component {
       )
     });
     return(
-      <div>
+      <div className={this.props.status}>
         <h2>{this.props.title}</h2>
         { kanbanListNode }
       </div>
@@ -152,7 +154,7 @@ class KanbanItems extends React.Component {
 
   render(){
     return(
-      <div>
+      <div className={this.state.status}>
         <h3>{this.state.title}</h3>
         <p>Priority: {this.state.priority}</p>
         <p>Assigned To: {this.state.assignedTo}</p>
