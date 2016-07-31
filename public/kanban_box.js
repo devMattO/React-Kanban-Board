@@ -123,7 +123,8 @@ class KanbanItems extends React.Component {
       createdBy: '',
       id: ''
     }
-    this.changeStatus = this.changeStatus.bind(this);
+    this.changeStatusUp = this.changeStatusUp.bind(this);
+    this.changeStatusDown = this.changeStatusDown.bind(this);
   }
   componentDidMount() {
     this.setState({
@@ -135,20 +136,25 @@ class KanbanItems extends React.Component {
       uniqueId: this.props.uniqueId
     });
   }
-  changeStatus() {
-    console.log(this.state.status, 'before if statement'); //figure out who this is && update status
-    console.log(this.state.title);
-    console.log(this.props.updateHandler)
-    //if
+
+  changeStatusUp() {
     if(this.state.status === 'todo'){
       this.state.status = 'doing';
     }else if(this.state.status === 'doing'){
       this.state.status = 'done';
     }
-    console.log(this.state.status, 'after if statement');
     this.props.updateHandler(this.props.uniqueId,this.props,this.state.status);
-
   }
+
+  changeStatusDown() {
+    if(this.state.status === 'done'){
+      this.state.status = 'doing';
+    }else if(this.state.status === 'doing'){
+      this.state.status = 'todo';
+    }
+    this.props.updateHandler(this.props.uniqueId,this.props,this.state.status);
+  }
+
   render(){
     return(
       <div>
@@ -156,7 +162,10 @@ class KanbanItems extends React.Component {
         <p>Priority: {this.state.priority}</p>
         <p>Assigned To: {this.state.assignedTo}</p>
         <p>Created By: {this.state.createdBy}</p>
-        <button onClick={this.changeStatus}> &gt; </button>
+        <span>
+          <button onClick={this.changeStatusDown}> &lt; </button>
+          <button onClick={this.changeStatusUp}> &gt; </button>
+        </span>
       </div>
     );
   };
