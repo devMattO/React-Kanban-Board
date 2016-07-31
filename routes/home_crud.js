@@ -55,8 +55,8 @@ Router.route('/:card_id')
       card.save((err) => {
         if (err) {
           res.send(err);
-        res.json({ message: 'Card updated!' });
         }
+        res.json({ message: true });
       });
     });
   })
