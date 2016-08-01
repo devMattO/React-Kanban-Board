@@ -15,7 +15,7 @@ db.once('open', () => {
 /*----------  SERVER MIDDLEWARE  ----------*/
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static('public'));
+app.use(express.static('public'));//may change with webpack
 app.use('/test', Router);
 
 var port = process.env.PORT || 3000;
