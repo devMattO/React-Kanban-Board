@@ -13,7 +13,8 @@
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "method-override": "^2.3.6",
-    "mongoose": "^4.5.7"
+    "mongoose": "^4.5.7",
+    "react-dom": "^15.3.0"
   },
   "devDependencies": {
     "browser-sync": "^2.13.0",
