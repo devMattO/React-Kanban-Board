@@ -5,6 +5,7 @@ import style from './kanban_box.scss';
 import NewCard from './kanban_new_card.jsx';
 
 
+
 class KanbanBox extends React.Component {
   constructor(){
     super();
@@ -52,15 +53,20 @@ class KanbanBox extends React.Component {
       }
 
     });
-    req.open("PUT", `/test/${uniqueId}`);
-    req.setRequestHeader("Content-Type", "application/json");
-    req.send(JSON.stringify({
-      "title": `${props.title}`,
-      "priority": `${props.priority}`,
-      "status": `${status}`,
-      "createdBy": `${props.createdBy}`,
-      "assignedTo": `${props.assignedTo}`
-    }));
+    if(!status) {
+      req.open("DELETE", `/test/${uniqueId}`);
+      req.send();
+    } else {
+      req.open("PUT", `/test/${uniqueId}`);
+      req.setRequestHeader("Content-Type", "application/json");
+      req.send(JSON.stringify({
+        "title": `${props.title}`,
+        "priority": `${props.priority}`,
+        "status": `${status}`,
+        "createdBy": `${props.createdBy}`,
+        "assignedTo": `${props.assignedTo}`
+      }));
+    }
   }
 
   handlePost(newCard) {

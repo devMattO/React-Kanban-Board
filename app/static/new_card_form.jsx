@@ -1,8 +1,9 @@
 'use strict';
 import React from 'react';
-import KanbanBox from './kanban_box.jsx';
-import KanbanColumns from './kanban_columns.jsx';
-import KanbanItems from './kanban_items.jsx';
+import KanbanBox from '../kanban_board_lib/kanban_box.jsx';
+import KanbanColumns from '../kanban_board_lib/kanban_columns.jsx';
+import KanbanItems from '../kanban_board_lib/kanban_items.jsx';
+import style from './new_card_form.scss';
 
 class NewCard extends React.Component {
 
@@ -30,9 +31,8 @@ class NewCard extends React.Component {
     newState[event.target.name] = event.target.value;
 
     this.setState(newState);
-    console.log(newState,'<----newState');
   }
-// <option value='status'>Status:</option>
+
   render() {
     return(
       <div className='newCard'>
@@ -40,14 +40,13 @@ class NewCard extends React.Component {
           <input className='textInput' onChange={this.handleInput} placeholder='Title' type='text' name='title' value={this.state.title} />
 
           <select className='selectInput' onChange={this.handleInput} placeholder='Status' value={this.state.status} name='status'>
-            <option value='status' selected> </option>
+            <option value='status'>Status</option>
             <option value='todo'>To-do</option>
             <option value='doing'>Doing</option>
             <option value='done'>Done</option>
           </select>
 
           <select className='selectInput' onChange={this.handleInput} placeholder='Priority' value={this.state.priority} name='priority'>
-            <option value='status' selected> </option>
             <option value='low'>Low</option>
             <option value='medium'>Medium</option>
             <option value='high'>High</option>

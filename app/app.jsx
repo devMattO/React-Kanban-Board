@@ -5,6 +5,7 @@ import KanbanColumns from './kanban_board_lib/kanban_columns.jsx';
 import KanbanItems from './kanban_board_lib/kanban_items.jsx';
 import NewCard from './kanban_board_lib/kanban_new_card';
 
+
 class App extends React.Component{
   render(){
     return(
@@ -12,6 +13,7 @@ class App extends React.Component{
         <ul role='nav'>
           <li><Link to='/'>Home</Link></li>
           <li><Link to='/about'>About</Link></li>
+          <li><Link to='/newcard'>New Card</Link></li>
         </ul>
         <KanbanBox />
       </div>
