@@ -70,7 +70,7 @@ class KanbanBox extends React.Component {
           <KanbanColumns title='To-Do' data={this.state.todo} updateHandler={this.updateHandler} />
           <KanbanColumns title='Doing' data={this.state.doing} updateHandler={this.updateHandler} />
           <KanbanColumns title='Done' data={this.state.done} updateHandler={this.updateHandler} />
-          <newForm />
+          <NewForm />
         </div>
       </div>
     );
@@ -172,7 +172,21 @@ class KanbanItems extends React.Component {
   };
 };
 
-class newForm extends React.Component {
+class NewForm extends React.Component {
+
+  constructor(){
+    super();
+    this.state = {
+      title: '',
+      status: '',
+      priority: '',
+      createdBy: '',
+      assignedTo: ''
+    }
+
+    this.handleInput = this.handleInput.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
 
   handleChange(event) {
     const req = new XMLHttpRequest();
@@ -181,29 +195,38 @@ class newForm extends React.Component {
     req.send();
   }
 
+  handleInput(event) {
+    let newState = {}
+    console.log('EVENT ====>', event.target.name);
+    newState[event.target.name] = event.target.value;
+
+    this.setState(newState);
+  }
+
   render() {
+    console.log('this.state', this.state)
     return(
       <div className='newForm'>
-        <form action='/test' method='post'>
-          <input className='textInput' placeholder='Title' type='text' name='title' />
+        <form action='/test' onSubmit={this.handlePost} method='post'>
+          <input className='textInput' onChange={this.handleInput} placeholder='Title' type='text' name='title' value={this.state.title} />
 
-          <select className='selectInput' placeholder='Status' name='status'>
+          <select className='selectInput' onChange={this.handleInput} placeholder='Status' value={this.state.status} name='status'>
             <option value='todo'>To-do</option>
             <option value='doing'>Doing</option>
             <option value='done'>Done</option>
           </select>
 
-          <select className='selectInput' placeholder='Priority' name='priority'>
+          <select className='selectInput' onChange={this.handleInput} placeholder='Priority' value={this.state.priority} name='priority'>
             <option value='low'>Low</option>
             <option value='medium' selected>Medium</option>
             <option value='high'>High</option>
           </select>
 
-          <input className='textInput' type='text' placeholder='Created By' name='createdBy' />
+          <input className='textInput' type='text' onChange={this.handleInput} placeholder='Created By' name='createdBy' value={this.state.createdBy}/>
 
-          <input className='textInput' type='text' placeholder='Assigned To' name='assignedTo' />
+          <input className='textInput' type='text' onChange={this.handleInput} placeholder='Assigned To' name='assignedTo' value={this.state.assignedTo} />
 
-          <input className='submitButton' onClick={this.} type='submit' value='Click me' />
+          <input className='submitButton' type='submit' value='Click me' />
         </form>
       </div>
     )
