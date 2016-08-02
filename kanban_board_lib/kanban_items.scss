@@ -1,0 +1,37 @@
+.todo{
+  // display: flex;
+  flex: 1 1 30%;
+  background-color: RGB(242,233,194);
+  border: 1px solid black;
+  padding: 5%;
+  line-height: 130%;
+  margin: 2%;
+  box-shadow: 0 8px 6px -6px black;
+
+}
+
+.doing{
+  // display: flex;
+  flex: 1 1 30%;
+  background-color: RGB(112,171,75);
+  border: 1px solid black;
+  padding: 5%;
+  line-height: 130%;
+  margin: 2%;
+  box-shadow: 0 8px 6px -6px black;
+
+
+}
+
+.done{
+  // display: flex;
+  flex: 1 1 30%;
+  background-color: RGB(76,153,212);
+  border: 1px solid black;
+  padding: 5%;
+  line-height: 130%;
+  margin: 2%;
+  box-shadow: 0 8px 6px -6px black;
+
+
+}
