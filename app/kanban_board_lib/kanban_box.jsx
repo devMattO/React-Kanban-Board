@@ -2,6 +2,9 @@
 import React from 'react';
 import KanbanColumns from './kanban_columns.jsx';
 import style from './kanban_box.scss';
+import NewCard from './kanban_new_card.jsx';
+
+
 
 class KanbanBox extends React.Component {
   constructor(){
@@ -14,6 +17,7 @@ class KanbanBox extends React.Component {
     };
     this.onPostData = this.onPostData.bind(this);
     this.updateHandler = this.updateHandler.bind(this);
+    this.handlePost = this.handlePost.bind(this);
   }
 
   onPostData(data) {
@@ -49,15 +53,32 @@ class KanbanBox extends React.Component {
       }
 
     });
-    req.open("PUT", `/test/${uniqueId}`);
-    req.setRequestHeader("Content-Type", "application/json");
-    req.send(JSON.stringify({
-      "title": `${props.title}`,
-      "priority": `${props.priority}`,
-      "status": `${status}`,
-      "createdBy": `${props.createdBy}`,
-      "assignedTo": `${props.assignedTo}`
-    }));
+    if(!status) {
+      req.open("DELETE", `/test/${uniqueId}`);
+      req.send();
+    } else {
+      req.open("PUT", `/test/${uniqueId}`);
+      req.setRequestHeader("Content-Type", "application/json");
+      req.send(JSON.stringify({
+        "title": `${props.title}`,
+        "priority": `${props.priority}`,
+        "status": `${status}`,
+        "createdBy": `${props.createdBy}`,
+        "assignedTo": `${props.assignedTo}`
+      }));
+    }
+  }
+
+  handlePost(newCard) {
+      var componentContext = this;
+      const req = new XMLHttpRequest();
+      req.addEventListener("load", function() {
+        console.log(this.responseText);
+        componentContext.loadData();
+      });
+      req.open("POST", "/test");
+      req.setRequestHeader("Content-Type", "application/json");
+      req.send(JSON.stringify(newCard));
   }
 
   componentDidMount() {
@@ -72,6 +93,7 @@ class KanbanBox extends React.Component {
           <KanbanColumns title='To-Do' data={this.state.todo} updateHandler={this.updateHandler} />
           <KanbanColumns title='Doing' data={this.state.doing} updateHandler={this.updateHandler} />
           <KanbanColumns title='Done' data={this.state.done} updateHandler={this.updateHandler} />
+          <NewCard handlePost={this.handlePost} />
         </div>
       </div>
     );
