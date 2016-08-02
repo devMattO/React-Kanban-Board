@@ -10,9 +10,10 @@ class KanbanBox extends React.Component {
       done: []
     };
 
-    console.log('this', this);
     this.onPostData = this.onPostData.bind(this);
     this.updateHandler = this.updateHandler.bind(this);
+    this.handlePost = this.handlePost.bind(this);
+    this.handlePut = this.handlePut.bind(this);
   }
 
   onPostData(data) {
@@ -38,6 +39,31 @@ class KanbanBox extends React.Component {
     req.send();
   }
 
+  handlePost(newCard) {
+    var componentContext = this;
+    const req = new XMLHttpRequest();
+    req.addEventListener("load", function() {
+      console.log(this.responseText);
+      componentContext.loadData();
+    });
+    req.open("POST", "/test");
+    req.setRequestHeader("Content-Type", "application/json");
+    req.send(JSON.stringify(newCard));
+  }
+
+
+  handlePut(editCard) {
+    var componentContext = this;
+    const req = new XMLHttpRequest();
+    req.addEventListener("load", function() {
+      console.log(this.responseText);
+      componentContext.loadData();
+    });
+    req.open("PUT", `/test/${editCard._id}`);
+    req.setRequestHeader("Content-Type", "application/json");
+    req.send(JSON.stringify(editCard));
+  }
+
   updateHandler(uniqueId,props,status){
     var that = this;
     const req = new XMLHttpRequest();
@@ -47,20 +73,25 @@ class KanbanBox extends React.Component {
       }
 
     });
-    req.open("PUT", `/test/${uniqueId}`);
-    req.setRequestHeader("Content-Type", "application/json");
-    req.send(JSON.stringify({
-      "title": `${props.title}`,
-      "priority": `${props.priority}`,
-      "status": `${status}`,
-      "createdBy": `${props.createdBy}`,
-      "assignedTo": `${props.assignedTo}`
-    }));
+    if(!status) {
+      req.open("DELETE", `/test/${uniqueId}`);
+      req.send();
+    } else {
+      req.open("PUT", `/test/${uniqueId}`);
+      req.setRequestHeader("Content-Type", "application/json");
+      req.send(JSON.stringify({
+        "title": `${props.title}`,
+        "priority": `${props.priority}`,
+        "status": `${status}`,
+        "createdBy": `${props.createdBy}`,
+        "assignedTo": `${props.assignedTo}`
+      }));
+    }
   }
 
   componentDidMount() {
-      this.loadData();
-  };
+    this.loadData();
+  }
 
   render(){
     return(
@@ -70,7 +101,8 @@ class KanbanBox extends React.Component {
           <KanbanColumns title='To-Do' data={this.state.todo} updateHandler={this.updateHandler} />
           <KanbanColumns title='Doing' data={this.state.doing} updateHandler={this.updateHandler} />
           <KanbanColumns title='Done' data={this.state.done} updateHandler={this.updateHandler} />
-          <NewForm />
+          <NewForm handlePost={this.handlePost} />
+          <EditForm handlePut={this.handlePut} />
         </div>
       </div>
     );
@@ -89,7 +121,6 @@ class KanbanColumns extends React.Component {
   render(){
     var that = this;
 
-    console.log('kanbanListNode ' , this.props);
     var kanbanListNode = this.props.data.map(function(kanbanDataItem){
       return(
         <KanbanItems
@@ -126,6 +157,7 @@ class KanbanItems extends React.Component {
     }
     this.changeStatusUp = this.changeStatusUp.bind(this);
     this.changeStatusDown = this.changeStatusDown.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
   componentDidMount() {
     this.setState({
@@ -156,6 +188,10 @@ class KanbanItems extends React.Component {
     this.props.updateHandler(this.props.uniqueId,this.props,this.state.status);
   }
 
+  handleDelete() {
+    this.props.updateHandler(this.props.uniqueId);
+  }
+
   render(){
     return(
       <div className={this.state.status}>
@@ -167,6 +203,7 @@ class KanbanItems extends React.Component {
           <button onClick={this.changeStatusDown}> &lt; </button>
           <button onClick={this.changeStatusUp}> &gt; </button>
         </span>
+        <button onClick={this.handleDelete}> Delete </button>
       </div>
     );
   };
@@ -185,26 +222,22 @@ class NewForm extends React.Component {
     }
 
     this.handleInput = this.handleInput.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    this.handlePost = this.handlePost.bind(this);
   }
 
-  handleChange(event) {
-    const req = new XMLHttpRequest();
-    req.addEventListener("load", this.onPostData);
-    req.open("POST", "/test");
-    req.send();
+  handlePost(event) {
+    event.preventDefault()
+    this.props.handlePost(this.state)
   }
 
   handleInput(event) {
     let newState = {}
-    console.log('EVENT ====>', event.target.name);
     newState[event.target.name] = event.target.value;
 
     this.setState(newState);
   }
 
   render() {
-    console.log('this.state', this.state)
     return(
       <div className='newForm'>
         <form action='/test' onSubmit={this.handlePost} method='post'>
@@ -218,13 +251,66 @@ class NewForm extends React.Component {
 
           <select className='selectInput' onChange={this.handleInput} placeholder='Priority' value={this.state.priority} name='priority'>
             <option value='low'>Low</option>
-            <option value='medium' selected>Medium</option>
+            <option value='medium'>Medium</option>
             <option value='high'>High</option>
           </select>
 
           <input className='textInput' type='text' onChange={this.handleInput} placeholder='Created By' name='createdBy' value={this.state.createdBy}/>
 
           <input className='textInput' type='text' onChange={this.handleInput} placeholder='Assigned To' name='assignedTo' value={this.state.assignedTo} />
+
+          <input className='submitButton' type='submit' value='Click me' />
+        </form>
+      </div>
+    )
+  }
+}
+
+class EditForm extends React.Component {
+
+  constructor(){
+    super();
+    this.state = {
+      title: '',
+      priority: '',
+      assignedTo: '',
+      createdBy: '',
+      _id: ''
+    }
+
+    this.handleInput = this.handleInput.bind(this);
+    this.handlePut = this.handlePut.bind(this);
+  }
+
+  handlePut(event) {
+    event.preventDefault()
+    this.props.handlePut(this.state)
+  }
+
+  handleInput(event) {
+    let newState = {}
+    newState[event.target.name] = event.target.value;
+
+    this.setState(newState);
+  }
+
+  render() {
+    return(
+      <div className='editForm'>
+        <form action='/test' onSubmit={this.handlePut} method='get'>
+          <input className='textInput' onChange={this.handleInput} placeholder='Title' type='text' name='title' value={this.state.title} />
+
+          <input className='textInput' type='text' onChange={this.handleInput} placeholder='Created By' name='createdBy' value={this.state.createdBy}/>
+
+          <input className='textInput' type='text' onChange={this.handleInput} placeholder='Assigned To' name='assignedTo' value={this.state.assignedTo} />
+
+          <input className='textInput' type='text' onChange={this.handleInput} placeholder='ID' name='_id' value={this.state._id} />
+
+          <select className='selectInput' onChange={this.handleInput} placeholder='Priority' value={this.state.priority} name='priority'>
+            <option value='low'>Low</option>
+            <option value='medium'>Medium</option>
+            <option value='high'>High</option>
+          </select>
 
           <input className='submitButton' type='submit' value='Click me' />
         </form>

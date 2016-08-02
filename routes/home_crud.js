@@ -35,8 +35,8 @@ Router.route('/')
     card.createdBy = req.body.createdBy;
     card.assignedTo = req.body.assignedTo;
     card.save( ( err ) => {
-      if (err) res.send(err);
-      // res.json({ message: 'Card created!' });
+      if (err) return res.send(err);
+      res.send(card);
     });
   });
 
