@@ -10,7 +10,7 @@ module.exports = {
   entry: [
     'webpack/hot/dev-server',
     'webpack-hot-middleware/client?reload=true',
-    path.join(__dirname, '/entry.jsx'),
+    path.join(__dirname, '/app/entry.jsx'),
   ],
   output: {
     path: path.resolve(__dirname, './dist'),
@@ -18,11 +18,11 @@ module.exports = {
     publicPath: '/',
   },
   resolve: {
-    extensions: ['', '.js'],
+    extensions: ['', '.js', '.jsx'],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'index.tpl.html',
+      template: 'app/index.tpl.html',
       inject: 'body',
       filename: 'index.html',
     }),
