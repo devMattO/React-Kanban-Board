@@ -9,6 +9,8 @@ class KanbanBox extends React.Component {
       doing: [],
       done: []
     };
+
+    console.log('this', this);
     this.onPostData = this.onPostData.bind(this);
     this.updateHandler = this.updateHandler.bind(this);
   }
@@ -28,7 +30,6 @@ class KanbanBox extends React.Component {
       })
     });
   }
-
 
   loadData(){
     const req = new XMLHttpRequest();
@@ -64,10 +65,13 @@ class KanbanBox extends React.Component {
   render(){
     return(
       <div>
-        <h1>Kanban Box</h1>
-        <KanbanColumns title='To-Do' data={this.state.todo} updateHandler={this.updateHandler} />
-        <KanbanColumns title='Doing' data={this.state.doing} updateHandler={this.updateHandler} />
-        <KanbanColumns title='Done' data={this.state.done} updateHandler={this.updateHandler} />
+        <h1>Kanban Board</h1>
+        <div className="kantainer">
+          <KanbanColumns title='To-Do' data={this.state.todo} updateHandler={this.updateHandler} />
+          <KanbanColumns title='Doing' data={this.state.doing} updateHandler={this.updateHandler} />
+          <KanbanColumns title='Done' data={this.state.done} updateHandler={this.updateHandler} />
+          <newForm />
+        </div>
       </div>
     );
   };
@@ -84,6 +88,8 @@ KanbanBox.defaultProps = {
 class KanbanColumns extends React.Component {
   render(){
     var that = this;
+
+    console.log('kanbanListNode ' , this.props);
     var kanbanListNode = this.props.data.map(function(kanbanDataItem){
       return(
         <KanbanItems
@@ -99,7 +105,7 @@ class KanbanColumns extends React.Component {
       )
     });
     return(
-      <div>
+      <div className={this.props.status}>
         <h2>{this.props.title}</h2>
         { kanbanListNode }
       </div>
@@ -152,7 +158,7 @@ class KanbanItems extends React.Component {
 
   render(){
     return(
-      <div>
+      <div className={this.state.status}>
         <h3>{this.state.title}</h3>
         <p>Priority: {this.state.priority}</p>
         <p>Assigned To: {this.state.assignedTo}</p>
@@ -166,7 +172,46 @@ class KanbanItems extends React.Component {
   };
 };
 
+class newForm extends React.Component {
+
+  handleChange(event) {
+    const req = new XMLHttpRequest();
+    req.addEventListener("load", this.onPostData);
+    req.open("POST", "/test");
+    req.send();
+  }
+
+  render() {
+    return(
+      <div className='newForm'>
+        <form action='/test' method='post'>
+          <input className='textInput' placeholder='Title' type='text' name='title' />
+
+          <select className='selectInput' placeholder='Status' name='status'>
+            <option value='todo'>To-do</option>
+            <option value='doing'>Doing</option>
+            <option value='done'>Done</option>
+          </select>
+
+          <select className='selectInput' placeholder='Priority' name='priority'>
+            <option value='low'>Low</option>
+            <option value='medium' selected>Medium</option>
+            <option value='high'>High</option>
+          </select>
+
+          <input className='textInput' type='text' placeholder='Created By' name='createdBy' />
+
+          <input className='textInput' type='text' placeholder='Assigned To' name='assignedTo' />
+
+          <input className='submitButton' onClick={this.} type='submit' value='Click me' />
+        </form>
+      </div>
+    )
+  }
+}
+
+
 ReactDOM.render(
-  <KanbanBox />,
+  <KanbanBox test='value'/>,
   document.getElementById('kanban-container')
 );

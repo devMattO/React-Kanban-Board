@@ -1,15 +1,106 @@
+@import 'partials/reset';
+@import 'partials/clearfix';
+
+// 800px media query??
+
+
 body {
-   font: 24px Helvetica;
-   background: #999999;
-   color:rgba(0,0,0,.25);
+  background-color: RGB(102,102,102);
+  font-family: Quicksand, monospace;
+  align-content: center;
+
+
 }
 
-#kanban-container {
-   min-height: 800px;
-   margin: 0px;
-   padding: 0px;
-   display: -webkit-flex;
-   display:         flex;
-   -webkit-flex-flow: row;
-           flex-flow: row;
+.kantainer{
+  display: flex;
+  text-align: center;
+  flex-flow: row-nowrap;
+  align-content: center;
+  justify-content: center;
+  width: 100%
+}
+
+h1 {
+  display: flex;
+  color: white;
+  font-size: 32px;
+  text-align: center;
+  margin-left: 36%;
+  margin-right: 35%;
+  width: 30%;
+  margin-bottom: 2%;
+  margin-top: 1%;
+  font-weight: bold;
+  text-shadow: 2px 2px 5px black;
+}
+
+.todo{
+  // display: flex;
+  flex: 1 1 30%;
+  background-color: RGB(242,233,194);
+  border: 1px solid black;
+  padding: 5%;
+  line-height: 130%;
+  margin: 2%;
+  box-shadow: 0 8px 6px -6px black;
+
+}
+
+.doing{
+  // display: flex;
+  flex: 1 1 30%;
+  background-color: RGB(112,171,75);
+  border: 1px solid black;
+  padding: 5%;
+  line-height: 130%;
+  margin: 2%;
+  box-shadow: 0 8px 6px -6px black;
+
+
+}
+
+.done{
+  // display: flex;
+  flex: 1 1 30%;
+  background-color: RGB(76,153,212);
+  border: 1px solid black;
+  padding: 5%;
+  line-height: 130%;
+  margin: 2%;
+  box-shadow: 0 8px 6px -6px black;
+
+}
+
+/*----------  NEW CARD FORM  ----------*/
+
+.newForm {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+.newForm > input[type=text], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.newForm > input[type=submit] {
+  width: 100%;
+  background-color: #4caf50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color#45a049;
 }

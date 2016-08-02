@@ -34,10 +34,9 @@ Router.route('/')
     card.status = req.body.status;
     card.createdBy = req.body.createdBy;
     card.assignedTo = req.body.assignedTo;
-    console.log(req.body.priority,'<----');
     card.save( ( err ) => {
       if (err) res.send(err);
-      res.json({ message: 'Card created!' });
+      // res.json({ message: 'Card created!' });
     });
   });
 
