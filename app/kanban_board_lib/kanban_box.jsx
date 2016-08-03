@@ -3,18 +3,12 @@ import React from 'react';
 import KanbanColumns from './kanban_columns.jsx';
 import style from './kanban_box.scss';
 import NewCard from './kanban_new_card.jsx';
-
-
+import Immutable from 'immutable';
+import { connect } from 'react-redux';
 
 class KanbanBox extends React.Component {
   constructor(){
     super();
-    this.state = {
-      data: [],
-      todo: [],
-      doing: [],
-      done: []
-    };
     this.onPostData = this.onPostData.bind(this);
     this.updateHandler = this.updateHandler.bind(this);
     this.handlePost = this.handlePost.bind(this);
@@ -35,7 +29,6 @@ class KanbanBox extends React.Component {
       })
     });
   }
-
 
   loadData(){
     const req = new XMLHttpRequest();
@@ -100,12 +93,24 @@ class KanbanBox extends React.Component {
   };
 };
 
-KanbanBox.propTypes = {
-  data: React.PropTypes.array
-};
-
-KanbanBox.defaultProps = {
-  data: []
+const mapStateToProps = (state, ownProps) => {
+  return {
+    data: state.redditReducer.toJS()
+  }
 }
 
-export default KanbanBox;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setItems: (data) => {
+      dispatch({
+        type: 'SET_ITEMS',
+        data
+      })
+    }
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+  )(KanbanBox);

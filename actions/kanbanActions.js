@@ -1,15 +1,15 @@
 'use strict';
 
-export const showItem = (index) => {
+export const setItems = (data) => {
   dispatch({
-    type: 'SHOW_ITEM',
-    index
+    type: 'SET_ITEMS',
+    data
   })
 }
 
-export const hideItem = (index) => {
+export const deleteItem = (index) => {
   dispatch({
-    type: 'HIDE_ITEM',
+    type: 'REMOVE_ITEMS',
     index
   })
 }
