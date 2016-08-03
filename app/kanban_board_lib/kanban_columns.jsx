@@ -5,7 +5,7 @@ import style from './kanban_columns.scss';
 
 class KanbanColumns extends React.Component {
   render(){
-    var that = this;
+    console.log(this, 'this');
     var kanbanListNode = this.props.data.map(function(kanbanDataItem, index){
       return(
         <KanbanItems

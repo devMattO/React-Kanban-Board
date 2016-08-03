@@ -5,30 +5,34 @@ import Immutable from 'immutable';
 import { connect } from 'react-redux';
 import style from './kanban_box.scss';
 import NewCard from './kanban_new_card.jsx';
-import { connect } from 'react-redux';
 
 class KanbanBox extends React.Component {
   constructor(){
     super();
-    console.log('STORERRERERERE', store);
     this.onPostData = this.onPostData.bind(this);
     this.updateHandler = this.updateHandler.bind(this);
     this.handlePost = this.handlePost.bind(this);
   }
-
   onPostData(data) {
     const parsedData = JSON.parse(data.currentTarget.response);
-    this.props.setItems({
-      todo: parsedData.filter((datuh)=>{
-        return datuh.status === 'todo';
-      }),
-      doing: parsedData.filter((datuh)=>{
-        return datuh.status === 'doing';
-      }),
-      done: parsedData.filter((datuh)=>{
-        return datuh.status === 'done';
-      })
-    });
+    console.log('PARSED DATA', parsedData);
+
+    const todo = parsedData.filter(function(element) {
+      return element.status === 'todo';
+    })
+    const doing = parsedData.filter(function(element) {
+      return element.status === 'doing';
+    })
+    const done = parsedData.filter(function(element) {
+      return element.status === 'done';
+    })
+    this.props.setItems(
+      {
+        todo,
+        doing,
+        done
+      }
+    );
   }
 
   loadData(){
@@ -67,7 +71,6 @@ class KanbanBox extends React.Component {
       var componentContext = this;
       const req = new XMLHttpRequest();
       req.addEventListener("load", function() {
-        console.log(this.responseText);
         componentContext.loadData();
       });
       req.open("POST", "/test");
@@ -84,9 +87,9 @@ class KanbanBox extends React.Component {
       <div className="kanban">
         <h1>Kanban Board</h1>
         <div className="kantainer">
-          <KanbanColumns title='To-Do' data={this.props.data} updateHandler={this.updateHandler} />
-          <KanbanColumns title='Doing' data={this.props.doing} updateHandler={this.updateHandler} />
-          <KanbanColumns title='Done' data={this.props.done} updateHandler={this.updateHandler} />
+          <KanbanColumns title={'To-Do'} data={[]} updateHandler={this.updateHandler} />
+          <KanbanColumns title={'Doing'} data={[]} updateHandler={this.updateHandler} />
+          <KanbanColumns title={'Done'} data={[]} updateHandler={this.updateHandler} />
           <NewCard handlePost={this.handlePost} />
         </div>
       </div>
@@ -95,8 +98,11 @@ class KanbanBox extends React.Component {
 };
 
 const mapStateToProps = ( state, ownProps ) => {
+    console.log(state, 'state');
+    console.log(ownProps, 'ownProps');
+    state.kanbanReducer.toJS();
+
   return {
-    data: state.kanbanReducer.toJS()
   };
 };
 

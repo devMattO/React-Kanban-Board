@@ -7,14 +7,6 @@ import style from './kanban_items.scss';
 class KanbanItems extends React.Component {
   constructor(){
     super();
-    this.state = {
-      title: '',
-      priority: '',
-      status: '',
-      assignedTo: '',
-      createdBy: '',
-      id: ''
-    }
     this.changeStatusUp = this.changeStatusUp.bind(this);
     this.changeStatusDown = this.changeStatusDown.bind(this);
     // this.handleDelete = this.handleDelete.bind(this);
@@ -22,7 +14,7 @@ class KanbanItems extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({
+    this.props.setItems({
       title: this.props.title,
       priority: this.props.priority,
       status: this.props.status,
@@ -67,19 +59,15 @@ class KanbanItems extends React.Component {
     );
   }
 
-  handleDelete() {
-    this.props.updateHandler(this.props.uniqueId);
-  }
+  // handleDelete() {
+  //   this.props.updateHandler(this.props.uniqueId);
+  // }
 
   handleEdit() {
     flag = true;
   }
 
   render(){
-    var partial;
-    if(flag){
-
-    }
     return(
       <div className={this.props.status}>
         <h3>{this.props.title}</h3>
