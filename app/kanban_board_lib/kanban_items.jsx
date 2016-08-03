@@ -1,5 +1,7 @@
 'use strict';
 import React from 'react';
+import Immutable from 'immutable';
+import { connect } from 'react-redux';
 import style from './kanban_items.scss';
 
 class KanbanItems extends React.Component {
@@ -15,7 +17,8 @@ class KanbanItems extends React.Component {
     }
     this.changeStatusUp = this.changeStatusUp.bind(this);
     this.changeStatusDown = this.changeStatusDown.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
+    // this.handleDelete = this.handleDelete.bind(this);
+    this.onDelete = this.onDelete.bind();
   }
 
   componentDidMount() {
@@ -28,6 +31,11 @@ class KanbanItems extends React.Component {
       uniqueId: this.props.uniqueId
     });
   }
+
+  onDelete(){
+    this.props.deleteItems(this.props.index);
+  }
+
   //how come this works and set state makes you click the button twice?
   changeStatusUp() {
     if(this.state.status === 'todo'){
@@ -64,25 +72,52 @@ class KanbanItems extends React.Component {
   }
 
   handleEdit() {
-
+    flag = true;
   }
 
   render(){
+    var partial;
+    if(flag){
+
+    }
     return(
-      <div className={this.state.status}>
-        <h3>{this.state.title}</h3>
-        <p>Priority: {this.state.priority}</p>
-        <p>Assigned To: {this.state.assignedTo}</p>
-        <p>Created By: {this.state.createdBy}</p>
+      <div className={this.props.status}>
+        <h3>{this.props.title}</h3>
+        <p>Priority: {this.props.priority}</p>
+        <p>Assigned To: {this.props.assignedTo}</p>
+        <p>Created By: {this.props.createdBy}</p>
         <button onClick={this.handleEdit}> Edit </button>
         <span>
           <button onClick={this.changeStatusDown}> &lt; </button>
           <button onClick={this.changeStatusUp}> &gt; </button>
         </span>
-        <button onClick={this.handleDelete}> Delete </button>
+        <button onClick={this.onDelete}> Delete </button>
       </div>
     );
   };
 };
 
-export default KanbanItems;
+const mapStateToProps = (state,ownProps) => {
+  return{
+    data: state.kanbanReducer.toJS()
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    deleteItems: (index) => {
+      dispatch({
+        type: 'DELETE_ITEMS',
+        index
+      });
+    }
+  };
+};
+
+
+
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+  )(KanbanItems);
