@@ -1,14 +1,16 @@
 'use strict';
 import React from 'react';
 import KanbanColumns from './kanban_columns.jsx';
+import Immutable from 'immutable';
+import { connect } from 'react-redux';
 import style from './kanban_box.scss';
 import NewCard from './kanban_new_card.jsx';
-import Immutable from 'immutable';
 import { connect } from 'react-redux';
 
 class KanbanBox extends React.Component {
   constructor(){
     super();
+    console.log('STORERRERERERE', store);
     this.onPostData = this.onPostData.bind(this);
     this.updateHandler = this.updateHandler.bind(this);
     this.handlePost = this.handlePost.bind(this);
@@ -16,8 +18,7 @@ class KanbanBox extends React.Component {
 
   onPostData(data) {
     const parsedData = JSON.parse(data.currentTarget.response);
-    this.setState({
-      data: parsedData,
+    this.props.setItems({
       todo: parsedData.filter((datuh)=>{
         return datuh.status === 'todo';
       }),
@@ -83,9 +84,9 @@ class KanbanBox extends React.Component {
       <div className="kanban">
         <h1>Kanban Board</h1>
         <div className="kantainer">
-          <KanbanColumns title='To-Do' data={this.state.todo} updateHandler={this.updateHandler} />
-          <KanbanColumns title='Doing' data={this.state.doing} updateHandler={this.updateHandler} />
-          <KanbanColumns title='Done' data={this.state.done} updateHandler={this.updateHandler} />
+          <KanbanColumns title='To-Do' data={this.props.data} updateHandler={this.updateHandler} />
+          <KanbanColumns title='Doing' data={this.props.doing} updateHandler={this.updateHandler} />
+          <KanbanColumns title='Done' data={this.props.done} updateHandler={this.updateHandler} />
           <NewCard handlePost={this.handlePost} />
         </div>
       </div>
@@ -93,11 +94,11 @@ class KanbanBox extends React.Component {
   };
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = ( state, ownProps ) => {
   return {
-    data: state.redditReducer.toJS()
-  }
-}
+    data: state.kanbanReducer.toJS()
+  };
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -105,12 +106,12 @@ const mapDispatchToProps = (dispatch) => {
       dispatch({
         type: 'SET_ITEMS',
         data
-      })
+      });
     }
-  }
-}
+  };
+};
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-  )(KanbanBox);
+)(KanbanBox);

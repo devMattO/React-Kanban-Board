@@ -4,12 +4,12 @@ export const setItems = (data) => {
   dispatch({
     type: 'SET_ITEMS',
     data
-  })
-}
+  });
+};
 
-export const deleteItem = (index) => {
+export const deleteItems = (index) => {
   dispatch({
-    type: 'REMOVE_ITEMS',
+    type: 'DELETE_ITEMS',
     index
-  })
-}
+  });
+};

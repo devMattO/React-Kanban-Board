@@ -1,24 +1,18 @@
 'use strict';
 
 import Immutable from 'immutable';
+const initalState = Immutable.List();
 
-const initialState = Immutable.List();
-
-const kanbanReducer = (state = initialState, action) => {
-
+const kanbanReducer = (state = initalState, action) => {
   let newState = state;
-
-  switch(action.type) {
-
+  switch(action.type){
     case 'SET_ITEMS':
-      return Immutable.fromJS(action.data)
-
-    case 'REMOVE_ITEMS':
+      return Immutable.fromJS(action.data);
+    case 'DELETE_ITEMS':
       return newState.delete(action.index);
-
     default:
       return newState;
   }
-}
+};
 
 export default kanbanReducer;
