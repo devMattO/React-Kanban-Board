@@ -9,38 +9,39 @@ class KanbanItems extends React.Component {
     super();
     this.changeStatusUp = this.changeStatusUp.bind(this);
     this.changeStatusDown = this.changeStatusDown.bind(this);
-    // this.handleDelete = this.handleDelete.bind(this);
-    this.onDelete = this.onDelete.bind();
+    this.onDelete = this.onDelete.bind(this);
   }
 
   componentDidMount() {
-    this.props.setItems({
-      title: this.props.title,
-      priority: this.props.priority,
-      status: this.props.status,
-      assignedTo: this.props.assignedTo,
-      createdBy: this.props.createdBy,
-      uniqueId: this.props.uniqueId
-    });
+    // this.loadData();
   }
 
   onDelete(){
-    this.props.deleteItems(this.props.index);
+    var oReq = new XMLHttpRequest();
+    oReq.addEventListener('load', (data) => {
+      this.props.deleteItems(data);
+    });
+    oReq.open('DELETE', `/test/${this.props.uniqueId}`);
+    oReq.send();
   }
+  //   const arr = this.props.todo.filter((element, index) => {
+  //     return index !== this.props.index;
+  //   })
+  //   this.props.setItems(arr);
+  // }
 
-  //how come this works and set state makes you click the button twice?
   changeStatusUp() {
-    if(this.state.status === 'todo'){
+    if(this.props.status === 'todo'){
       //this.setState({status: 'doing'});
-      this.state.status = 'doing';
-    }else if(this.state.status === 'doing'){
+      this.props.status = 'doing';
+    }else if(this.props.status === 'doing'){
       //this.setState({status: 'done'});
-      this.state.status = 'done';
+      this.props.status = 'done';
     }
     this.props.updateHandler(
       this.props.uniqueId,
       this.props,
-      this.state.status
+      this.props.status
     );
   }
 
@@ -59,13 +60,6 @@ class KanbanItems extends React.Component {
     );
   }
 
-  // handleDelete() {
-  //   this.props.updateHandler(this.props.uniqueId);
-  // }
-
-  handleEdit() {
-    flag = true;
-  }
 
   render(){
     return(
@@ -74,7 +68,6 @@ class KanbanItems extends React.Component {
         <p>Priority: {this.props.priority}</p>
         <p>Assigned To: {this.props.assignedTo}</p>
         <p>Created By: {this.props.createdBy}</p>
-        <button onClick={this.handleEdit}> Edit </button>
         <span>
           <button onClick={this.changeStatusDown}> &lt; </button>
           <button onClick={this.changeStatusUp}> &gt; </button>
@@ -86,23 +79,27 @@ class KanbanItems extends React.Component {
 };
 
 const mapStateToProps = (state,ownProps) => {
-  return{
-    data: state.kanbanReducer.toJS()
+  const todo = state.kanbanReducer.toJS().todo;
+  const doing = state.kanbanReducer.toJS().doing;
+  const done = state.kanbanReducer.toJS().done;
+
+  return {
+    todo,
+    doing,
+    done
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    deleteItems: (index) => {
+    deleteItems: (data) => {
       dispatch({
         type: 'DELETE_ITEMS',
-        index
+        data
       });
     }
   };
 };
-
-
 
 
 export default connect(

@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const favicon = require('express-favicon');
 const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
@@ -18,7 +19,6 @@ db.on('error', console.error.bind(console, "connect error:"));
 db.once('open', () => {
   console.log("Mongo reporting for duty!");
 });
-
 const isDeveloping = process.env.NODE_ENV !== 'production';
 const port = isDeveloping ? 3000 : process.env.PORT;
 
@@ -44,14 +44,17 @@ if (isDeveloping) {
     res.end();
   };
 
+  app.use(favicon(__dirname + '/public/favicon.ico'));
   app.use(middleware);
   app.use(webpackHotMiddleware(compiler));
   app.use('/test', Router);
   app.get('*', response);
+
 } else {
   app.use(express.static(`${__dirname}/dist`));
   app.get('*', (req, res) => {
     res.write(
+
       fs.readFileSync(path.resolve(__dirname, 'dist/index.html'))
     );
   });

@@ -30,7 +30,6 @@ class NewCard extends React.Component {
     newState[event.target.name] = event.target.value;
 
     this.setState(newState);
-    console.log(newState,'<----newState');
   }
 // <option value='status'>Status:</option>
   render() {

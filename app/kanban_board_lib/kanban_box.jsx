@@ -15,7 +15,6 @@ class KanbanBox extends React.Component {
   }
   onPostData(data) {
     const parsedData = JSON.parse(data.currentTarget.response);
-    console.log('PARSED DATA', parsedData);
 
     const todo = parsedData.filter(function(element) {
       return element.status === 'todo';
@@ -87,9 +86,9 @@ class KanbanBox extends React.Component {
       <div className="kanban">
         <h1>Kanban Board</h1>
         <div className="kantainer">
-          <KanbanColumns title={'To-Do'} data={[]} updateHandler={this.updateHandler} />
-          <KanbanColumns title={'Doing'} data={[]} updateHandler={this.updateHandler} />
-          <KanbanColumns title={'Done'} data={[]} updateHandler={this.updateHandler} />
+          <KanbanColumns title={'To-Do'} data={this.props.todo} updateHandler={this.updateHandler} />
+          <KanbanColumns title={'Doing'} data={this.props.doing} updateHandler={this.updateHandler} />
+          <KanbanColumns title={'Done'} data={this.props.done} updateHandler={this.updateHandler} />
           <NewCard handlePost={this.handlePost} />
         </div>
       </div>
@@ -98,11 +97,14 @@ class KanbanBox extends React.Component {
 };
 
 const mapStateToProps = ( state, ownProps ) => {
-    console.log(state, 'state');
-    console.log(ownProps, 'ownProps');
-    state.kanbanReducer.toJS();
+  const todo = state.kanbanReducer.toJS().todo;
+  const doing = state.kanbanReducer.toJS().doing;
+  const done = state.kanbanReducer.toJS().done;
 
   return {
+    todo,
+    doing,
+    done
   };
 };
 

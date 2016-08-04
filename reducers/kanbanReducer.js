@@ -12,10 +12,11 @@ const kanbanReducer = (state = initialState, action) => {
   let newState = state;
   switch(action.type){
     case 'SET_ITEMS':
-    console.log(action, '<=====ACTION');
       return Immutable.fromJS(action.data);
     case 'DELETE_ITEMS':
-      return newState.delete(action.index);
+      console.log("WE DID IT BOIYS");
+      break;
+       // newState.delete(action.index);
     default:
       return newState;
   }
