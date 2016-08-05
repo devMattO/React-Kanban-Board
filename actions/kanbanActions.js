@@ -14,10 +14,10 @@ export const deleteItems = (index) => {
   });
 };
 
-export const moveRight = (oldStatus, data) => {
+export const moveRight = (newStatus, data) => {
   dispatch({
     type: 'MOVE_RIGHT',
-    oldStatus,
+    newStatus,
     data
   });
 };

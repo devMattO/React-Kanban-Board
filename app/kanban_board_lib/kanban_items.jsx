@@ -21,21 +21,19 @@ class KanbanItems extends React.Component {
   // }
 
   changeStatusUp(){
-    let oldStatus;
+    let newStatus;
 
     if(this.props.status === 'todo'){
-      oldStatus = this.props.status;
-      // this.props.status.toJS() = 'doing';
+      newStatus = 'doing';
     } else if(this.props.status === 'doing'){
-      oldStatus = this.props.status;
-      // this.props.status.toJS() = 'done';
+      newStatus = 'done';
     }
 
     var upReq = new XMLHttpRequest;
     upReq.addEventListener('load', (data) => {
       const parsedResponse = JSON.parse(data.target.response);
       if(parsedResponse) {
-        this.props.moveRight(oldStatus, this.props)
+        this.props.moveRight(newStatus, this.props)
       }
     });
     upReq.open('PUT', `/test/${this.props.uniqueId}`)
@@ -43,7 +41,7 @@ class KanbanItems extends React.Component {
     upReq.send(JSON.stringify({
       "title": `${this.props.title}`,
       "priority": `${this.props.priority}`,
-      "status": `${this.props.status}`,
+      "status": `${newStatus}`,
       "createdBy": `${this.props.createdBy}`,
       "assignedTo": `${this.props.assignedTo}`
     }));
@@ -98,10 +96,10 @@ const mapDispatchToProps = (dispatch) => {
         data
       });
     },
-    moveRight: (oldStatus, data) => {
+    moveRight: (newStatus, data) => {
       dispatch({
         type: 'MOVE_RIGHT',
-        oldStatus,
+        newStatus,
         data
       });
     }

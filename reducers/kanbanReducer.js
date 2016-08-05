@@ -24,20 +24,19 @@ const kanbanReducer = (state = initialState, action) => {
       return newState.set(`${action.data.status}`, newRow);
 
     case 'MOVE_RIGHT':
-      const moveRight = newState.find((value, key) => {
-        return key == action.oldStatus;
-      }).update((item) => {
-        console.log('item',item);
+
+      var newest = newState.update(action.data.status, (key) => {
+        return key.update(action.data.index, (item) => {
+          var popItem = item;
+          return item.update( 'status', () => {
+            return action.newStatus;
+          });
+        });
       });
 
+      console.log(newest.toJS(), 'NEWEST');
+      return newest;
 
-        // moveRight.findIndex(function(item) {
-        //   return item.get(action.oldStatus) === "third";
-        // }), function(item) {
-        //   return item.set("count", 4);
-        // }
-      // return newState.set(`${action.data.status}`, moveRight);
-      break;
     default:
       return newState;
   }

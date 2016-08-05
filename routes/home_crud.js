@@ -42,7 +42,6 @@ Router.route('/')
 
 Router.route('/:card_id')
   .put( ( req, res ) => {
-    console.log('PUT IS WORKING');
     Card.findById(req.params.card_id, ( err, card ) => {
       if (err) res.send(err);
 
