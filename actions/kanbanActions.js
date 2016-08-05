@@ -14,6 +14,14 @@ export const deleteItems = (index) => {
   });
 };
 
+export const moveLeft = (newStatus, data) => {
+  dispatch({
+    type: 'MOVE_LEFT',
+    newStatus,
+    data
+  });
+};
+
 export const moveRight = (newStatus, data) => {
   dispatch({
     type: 'MOVE_RIGHT',

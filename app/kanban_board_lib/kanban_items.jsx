@@ -8,7 +8,7 @@ class KanbanItems extends React.Component {
   constructor(){
     super();
     this.changeStatusUp = this.changeStatusUp.bind(this);
-    // this.changeStatusDown = this.changeStatusDown.bind(this);
+    this.changeStatusDown = this.changeStatusDown.bind(this);
     this.onDelete = this.onDelete.bind(this);
   }
 
@@ -16,13 +16,34 @@ class KanbanItems extends React.Component {
 
   }
 
-  // changeStatusDown(){
-  //   var downReq = new XMLHttpRequest;
-  // }
+  changeStatusDown(){
+    let newStatus;
+    if(this.props.status === 'done'){
+      newStatus = 'doing';
+    } else if(this.props.status === 'doing'){
+      newStatus = 'todo';
+    }
+
+    var upReq = new XMLHttpRequest;
+    upReq.addEventListener('load', (data) => {
+      const parsedResponse = JSON.parse(data.target.response);
+      if(parsedResponse) {
+        this.props.moveRight(newStatus, this.props)
+      }
+    });
+    upReq.open('PUT', `/test/${this.props.uniqueId}`)
+    upReq.setRequestHeader("Content-Type", "application/json");
+    upReq.send(JSON.stringify({
+      "title": `${this.props.title}`,
+      "priority": `${this.props.priority}`,
+      "status": `${newStatus}`,
+      "createdBy": `${this.props.createdBy}`,
+      "assignedTo": `${this.props.assignedTo}`
+    }));
+  }
 
   changeStatusUp(){
     let newStatus;
-
     if(this.props.status === 'todo'){
       newStatus = 'doing';
     } else if(this.props.status === 'doing'){
@@ -93,6 +114,13 @@ const mapDispatchToProps = (dispatch) => {
     deleteItems: (data) => {
       dispatch({
         type: 'DELETE_ITEMS',
+        data
+      });
+    },
+    moveLeft: (newStatus, data) => {
+      dispatch({
+        type:'MOVE_LEFT',
+        newStatus,
         data
       });
     },

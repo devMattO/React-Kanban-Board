@@ -16,26 +16,50 @@ const kanbanReducer = (state = initialState, action) => {
       return Immutable.fromJS(action.data);
 
     case 'DELETE_ITEMS':
-      const newRow = newState.find((value, key) => {
-        return key == action.data.status;
-      }).delete(action.data.index);
-      console.log(newState.set(`${action.data.status}`, newRow).toJS());
-      console.log(action.data.status, 'STATUS');
-      return newState.set(`${action.data.status}`, newRow);
+      const deleted = newState.updateIn([action.data.status], (column) => {
+        return column.deleteIn([action.data.index]);
+      });
+      return deleted;
 
-    case 'MOVE_RIGHT':
-
-      var newest = newState.update(action.data.status, (key) => {
-        return key.update(action.data.index, (item) => {
-          var popItem = item;
-          return item.update( 'status', () => {
+    case 'MOVE_LEFT':
+      let leftCard;
+      const leftUpdate = newState.updateIn([action.data.status], (oldCol) => {
+        oldCol.update(action.data.index, (oldCard) => {
+          leftCard = oldCard.updateIn(['status'], () => {
             return action.newStatus;
           });
         });
+        return oldCol.deleteIn([action.data.index]);
+      }).updateIn([action.newStatus], (newCol) => {
+        leftCard = leftCard.updateIn(['index'], () => {
+          return newCol.toJS().length;
+        });
+        console.log('leftCard ' , leftCard.toJS());
+        return newCol.push(leftCard);
       });
 
-      console.log(newest.toJS(), 'NEWEST');
-      return newest;
+      return leftUpdate;
+
+    case 'MOVE_RIGHT':
+      // updateIn(keyPath: Array<any>, updater: (value: any) => any): Map<K, V>
+      let rightCard;
+      const rightUpdate = newState.updateIn([action.data.status], (oldCol) => {
+        oldCol.update(action.data.index, (oldCard) => {
+          rightCard = oldCard.updateIn(['status'], () => {
+            return action.newStatus;
+          });
+        });
+        return oldCol.deleteIn([action.data.index]);
+      }).updateIn([action.newStatus], (newCol) => {
+        rightCard = rightCard.updateIn(['index'], () => {
+          return newCol.toJS().length;
+        });
+        console.log('rightCard ' , rightCard.toJS());
+        return newCol.push(rightCard);
+      });
+
+      return rightUpdate;
+
 
     default:
       return newState;
