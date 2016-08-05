@@ -13,3 +13,11 @@ export const deleteItems = (index) => {
     index
   });
 };
+
+export const moveRight = (oldStatus, data) => {
+  dispatch({
+    type: 'MOVE_RIGHT',
+    oldStatus,
+    data
+  });
+};

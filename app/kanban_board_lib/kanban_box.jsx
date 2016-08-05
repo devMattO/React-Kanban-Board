@@ -10,20 +10,29 @@ class KanbanBox extends React.Component {
   constructor(){
     super();
     this.onPostData = this.onPostData.bind(this);
-    this.updateHandler = this.updateHandler.bind(this);
+    // this.updateHandler = this.updateHandler.bind(this);
     this.handlePost = this.handlePost.bind(this);
   }
   onPostData(data) {
     const parsedData = JSON.parse(data.currentTarget.response);
 
-    const todo = parsedData.filter(function(element) {
-      return element.status === 'todo';
+    const todo = parsedData.filter(function(element, index) {
+      if(element.status == 'todo') {
+        element.index =  index;
+        return element;
+      }
     })
-    const doing = parsedData.filter(function(element) {
-      return element.status === 'doing';
+    const doing = parsedData.filter(function(element, index) {
+      if(element.status == 'doing') {
+        element.index =  index;
+        return element;
+      }
     })
-    const done = parsedData.filter(function(element) {
-      return element.status === 'done';
+    const done = parsedData.filter(function(element, index) {
+      if(element.status == 'done') {
+        element.index =  index;
+        return element;
+      }
     })
     this.props.setItems(
       {
@@ -41,30 +50,30 @@ class KanbanBox extends React.Component {
     req.send();
   }
 
-  updateHandler(uniqueId,props,status){
-    var that = this;
-    const req = new XMLHttpRequest();
-    req.addEventListener("load", function(){
-      if(this.responseText){
-        that.loadData();
-      }
+  // updateHandler(uniqueId,props,status){
+  //   var that = this;
+  //   const req = new XMLHttpRequest();
+  //   req.addEventListener("load", function(){
+  //     if(this.responseText){
+  //       that.loadData();
+  //     }
 
-    });
-    if(!status) {
-      req.open("DELETE", `/test/${uniqueId}`);
-      req.send();
-    } else {
-      req.open("PUT", `/test/${uniqueId}`);
-      req.setRequestHeader("Content-Type", "application/json");
-      req.send(JSON.stringify({
-        "title": `${props.title}`,
-        "priority": `${props.priority}`,
-        "status": `${status}`,
-        "createdBy": `${props.createdBy}`,
-        "assignedTo": `${props.assignedTo}`
-      }));
-    }
-  }
+  //   });
+  //   if(!status) {
+  //     req.open("DELETE", `/test/${uniqueId}`);
+  //     req.send();
+  //   } else {
+  //     req.open("PUT", `/test/${uniqueId}`);
+  //     req.setRequestHeader("Content-Type", "application/json");
+  //     req.send(JSON.stringify({
+  //       "title": `${props.title}`,
+  //       "priority": `${props.priority}`,
+  //       "status": `${status}`,
+  //       "createdBy": `${props.createdBy}`,
+  //       "assignedTo": `${props.assignedTo}`
+  //     }));
+  //   }
+  // }
 
   handlePost(newCard) {
       var componentContext = this;
@@ -78,10 +87,11 @@ class KanbanBox extends React.Component {
   }
 
   componentDidMount() {
-      this.loadData();
+    this.loadData();
   };
 
   render(){
+    console.log('CURRENT STATE', this.props);
     return(
       <div className="kanban">
         <h1>Kanban Board</h1>

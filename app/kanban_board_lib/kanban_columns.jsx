@@ -5,17 +5,16 @@ import style from './kanban_columns.scss';
 
 class KanbanColumns extends React.Component {
   render(){
-    console.log(this.props.data, 'this.props.data');
-    var kanbanListNode = this.props.data.map(function(kanbanDataItem, index){
+    var kanbanListNode = this.props.data.map(function(kanbanDataItem){
       return(
         <KanbanItems
-          index={index}
+          index={kanbanDataItem.index}
           title={kanbanDataItem.title}
           priority={kanbanDataItem.priority}
           status={kanbanDataItem.status}
           createdBy={kanbanDataItem.createdBy}
           assignedTo={kanbanDataItem.assignedTo}
-          key={kanbanDataItem._id}
+          key={kanbanDataItem.index}
           uniqueId={kanbanDataItem._id}
         />
       )

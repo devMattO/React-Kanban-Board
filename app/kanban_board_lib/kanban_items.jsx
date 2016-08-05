@@ -8,58 +8,58 @@ class KanbanItems extends React.Component {
   constructor(){
     super();
     this.changeStatusUp = this.changeStatusUp.bind(this);
-    this.changeStatusDown = this.changeStatusDown.bind(this);
+    // this.changeStatusDown = this.changeStatusDown.bind(this);
     this.onDelete = this.onDelete.bind(this);
   }
 
   componentDidMount() {
-    // this.loadData();
+
+  }
+
+  // changeStatusDown(){
+  //   var downReq = new XMLHttpRequest;
+  // }
+
+  changeStatusUp(){
+    let oldStatus;
+
+    if(this.props.status === 'todo'){
+      oldStatus = this.props.status;
+      // this.props.status.toJS() = 'doing';
+    } else if(this.props.status === 'doing'){
+      oldStatus = this.props.status;
+      // this.props.status.toJS() = 'done';
+    }
+
+    var upReq = new XMLHttpRequest;
+    upReq.addEventListener('load', (data) => {
+      const parsedResponse = JSON.parse(data.target.response);
+      if(parsedResponse) {
+        this.props.moveRight(oldStatus, this.props)
+      }
+    });
+    upReq.open('PUT', `/test/${this.props.uniqueId}`)
+    upReq.setRequestHeader("Content-Type", "application/json");
+    upReq.send(JSON.stringify({
+      "title": `${this.props.title}`,
+      "priority": `${this.props.priority}`,
+      "status": `${this.props.status}`,
+      "createdBy": `${this.props.createdBy}`,
+      "assignedTo": `${this.props.assignedTo}`
+    }));
   }
 
   onDelete(){
     var oReq = new XMLHttpRequest();
     oReq.addEventListener('load', (data) => {
-      this.props.deleteItems(data);
+      const parsedResponse = JSON.parse(data.target.response);
+      if(parsedResponse) {
+        this.props.deleteItems(this.props);
+      }
     });
     oReq.open('DELETE', `/test/${this.props.uniqueId}`);
     oReq.send();
   }
-  //   const arr = this.props.todo.filter((element, index) => {
-  //     return index !== this.props.index;
-  //   })
-  //   this.props.setItems(arr);
-  // }
-
-  changeStatusUp() {
-    if(this.props.status === 'todo'){
-      //this.setState({status: 'doing'});
-      this.props.status = 'doing';
-    }else if(this.props.status === 'doing'){
-      //this.setState({status: 'done'});
-      this.props.status = 'done';
-    }
-    this.props.updateHandler(
-      this.props.uniqueId,
-      this.props,
-      this.props.status
-    );
-  }
-
-  changeStatusDown() {
-    if(this.state.status === 'done'){
-      //this.setState({status: 'doing'});
-      this.state.status = 'doing';
-    }else if(this.state.status === 'doing'){
-      //this.setState({status: 'todo'});
-      this.state.status = 'todo';
-    }
-    this.props.updateHandler(
-      this.props.uniqueId,
-      this.props,
-      this.state.status
-    );
-  }
-
 
   render(){
     return(
@@ -95,6 +95,13 @@ const mapDispatchToProps = (dispatch) => {
     deleteItems: (data) => {
       dispatch({
         type: 'DELETE_ITEMS',
+        data
+      });
+    },
+    moveRight: (oldStatus, data) => {
+      dispatch({
+        type: 'MOVE_RIGHT',
+        oldStatus,
         data
       });
     }
